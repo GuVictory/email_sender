@@ -1,21 +1,23 @@
 import smtplib
 from email.message import EmailMessage
-import os
+from os import getenv
 from pipenv.vendor.dotenv import load_dotenv, find_dotenv
+from string import Template
+from pathlib import Path
 
 load_dotenv(find_dotenv())
 
-
-EMAIL_LOGIN = os.getenv("email_login")
-EMAIL_PASSWORD = os.getenv("email_password")
+html = Template(Path('index.html').read_text())
+EMAIL_LOGIN = getenv("email_login")
+EMAIL_PASSWORD = getenv("email_password")
 
 
 email = EmailMessage()
 email['from'] = 'Python Creeeper'
-email['to'] = 'gubanova.vi10@gmail.com'
+email['to'] = 'znajderko@yandex.ru'  # znajderko@yandex.ru
 email['subject'] = 'Super secret msg'
 
-email.set_content('Haha, Hello, World!')
+email.set_content(html.substitute(name='Кит кит кашалот'), 'html')
 
 with smtplib.SMTP(host='smtp.gmail.com', port=587) as smtp:
     smtp.ehlo()
